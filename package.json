@@ -26,7 +26,8 @@
     "node-fetch": "^1.5.3",
     "numeral": "^1.5.3",
     "qry": "^0.1.0",
-    "restify": "^4.1.1"
+    "restify": "^4.1.1",
+    "firebase": "3.1.0"
   },
   "engines": {
     "node": "~4.1.2"
