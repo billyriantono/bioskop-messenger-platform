@@ -1,5 +1,4 @@
-var mongoose = require('mongoose');
-var Movies = require('./Movies');
+var mongoose = require('mongoose'); 
 
 module.exports = mongoose.model('Schedules', {
     date: { type: String },
