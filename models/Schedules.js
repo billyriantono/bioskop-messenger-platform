@@ -1,4 +1,4 @@
-var mongoose = require('mongoose'); 
+var mongoose = require('mongoose');
 
 module.exports = mongoose.model('Schedules', {
     date: { type: String },

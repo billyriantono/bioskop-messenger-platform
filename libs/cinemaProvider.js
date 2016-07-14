@@ -37,10 +37,10 @@ var cinemaProviders = {
                             itemProcessed++;
                         }
 
-                        if (itemProcessed == cinemas.length) {
+
                             console.log("Process Item : " + itemProcessed + " : " + cinemas.length);
                             callback();
-                        }
+
                     });
 
 
