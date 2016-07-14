@@ -16,13 +16,26 @@ const
   crypto = require('crypto'),
   express = require('express'),
   https = require('https'),  
+  cinemaProvider = require('./libs/cinemaProvider'),
+  mongoose = require('mongoose'),
   request = require('request');
 
 var app = express();
 
+
+var options = { server: { socketOptions: { keepAlive: 1 } } };
+var connectionString = 'mongodb://'+config.get('mongoDbUsername')+':'+config.get('mongoDbPassword')+'@'+config.get('mongoDbHost')+'/tata';
+
+mongoose.connect(connectionString,options);
+
 app.set('port', process.env.PORT || 5000);
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
+
+
+//setup cron
+var domain = require('domain');
+var scope = domain.create();
 
 /*
  * Be sure to setup your config values before running this code. You can 
@@ -49,6 +62,30 @@ if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN)) {
   console.error("Missing config values");
   process.exit(1);
 }
+
+
+scope.run(function() {
+            // Launch the cinema data scraper
+            try {
+                var CronJob = require('cron').CronJob;
+                var job = new CronJob("00 00 10 * * *",
+                    function(){
+                        cinemaProvider.refreshData(0);
+                    }, function () {
+                        // This function is executed when the job stops
+                    },
+                    true
+                );
+                console.log("Cron job started");
+            } catch(ex) {
+                console.log("Cron pattern not valid");
+            }
+            // Start extraction right now
+            cinemaProvider.refreshData(0);
+});
+scope.on('error', function(err) {
+            console.log(err.stack.split("\n"));
+});
 
 /*
  * Use your own validation token. Check that the token used in the Webhook 

@@ -1,0 +1,12 @@
+{
+    "appSecret": "",
+    "pageAccessToken": "",
+    "validationToken": "",
+    "blitzBaseUrl": "https://www.cgvblitz.com/en/schedule/cinema",
+    "blitzSeatUrl": "https://www.cgvblitz.com/en/schedule/seat",
+    "blitzMovieUrl": "https://www.cgvblitz.com/",
+    "mongoDbHost": "",
+    "mongoDbUsername": "",
+    "mongoDbPassword": "",
+    "scrapperTime": "00 30 11 * * *"
+}

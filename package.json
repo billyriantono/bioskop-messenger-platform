@@ -18,16 +18,16 @@
     "body-parser": "^1.15.0",
     "config": "^1.20.4",
     "express": "^4.13.4",
-    "request": "^2.72.0",
+    "request-promise": "3.0.0",
     "cheerio": "^0.20.0",
     "moment": "^2.14.1",
     "moment-timezone": "^0.5.4",
-    "nedb-promise": "^2.0.0",
-    "node-fetch": "^1.5.3",
     "numeral": "^1.5.3",
-    "qry": "^0.1.0",
-    "restify": "^4.1.1",
-    "firebase": "3.1.0"
+    "async": "2.0.0",
+    "cron": "^1.0.4",
+    "dateformat": "^1.0.12",
+    "lodash": "4.13.1",
+    "mongoose": "4.5.4"
   },
   "engines": {
     "node": "~4.1.2"
