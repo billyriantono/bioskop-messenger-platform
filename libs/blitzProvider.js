@@ -8,6 +8,7 @@ const
 require('moment-timezone'),
     Schedules = require('../models/Schedules'),
     Cinemas = require('../models/Cinemas'),
+    Movies = require('../models/Movies'),
     Cities = require('../models/Cities');
 
 var model = [];
@@ -119,6 +120,83 @@ blitzProvider.refreshMovieSchedule = function (cinemaId, cinemaName, city, cb) {
         });
 };
 
+
+blitzProvider.refreshNowPlayingMovies = function (cb) {
+    var moviesTitle = [];
+    var options = {
+        uri: config.get('blitzNowPlayingMovieUrl'),
+        transform: function (body) {
+            return cheerio.load(body);
+        }
+    };
+
+    request(options)
+        .then(function ($) {
+            try {
+                $('.movie-list-body li').each((i, elm) => {
+                    var splitId = $(elm).children().find('.sel-body-play').attr('href').toString().split('/');
+                    var movie = {
+                        title: "",
+                        id: splitId[splitId.length - 1]
+                    }
+                    moviesTitle.push(movie);
+                })
+                if (moviesTitle.length > 0) {
+                    cb(true, moviesTitle);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        })
+        .catch(function (err) {
+            // Crawling failed or Cheerio choked...
+            console.log(err);
+        });
+};
+
+blitzProvider.extractMovieDetails = function (movieId, cb) {
+    var options = {
+        uri: config.get('blitzMovieUrl') + '/' + movieId,
+        transform: function (body) {
+            return cheerio.load(body);
+        }
+    };
+
+    request(options)
+        .then(function ($) {
+            try {
+                var filmTitle = $('.movie-info-title').text().toString().trim();
+                var trailerUrl = $('.trailer-section').children().first().attr('src');
+                var posterUrl = config.get('blitzUrl') + $('.poster-section').children().first().attr('src');
+                var synopsis = $('.movie-synopsis').first().text();
+
+                var movie = new Movies({
+                    id: movieId,
+                    title: filmTitle,
+                    trailer: trailerUrl,
+                    poster: posterUrl,
+                    actors: "",
+                    directors: "",
+                    duration: 0,
+                    rating: 5,
+                    synopsis: synopsis
+                });
+
+                movie.save(function (err, newItem) {
+                    if (err == null) {
+                        cb(true);
+                    }
+                });
+
+            } catch (err) {
+                console.log(err);
+            }
+        })
+        .catch(function (err) {
+            // Crawling failed or Cheerio choked...
+            console.log(err);
+        });
+};
 module.exports = BlitzProvider;
 
 

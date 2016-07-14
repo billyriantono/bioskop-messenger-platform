@@ -13,6 +13,27 @@ var cinemaProviders = {
             currentProvider = new BlitzProvider();
         }
 
+
+        currentProvider.refreshNowPlayingMovies(function (isSuccess, movieList) {
+            if (isSuccess) {
+                async.each(movieList, function (movie, callback) {
+                    currentProvider.extractMovieDetails(movie.id, function (isSuccess) {
+                        if (isSuccess) {
+                            callback();
+                        }
+                    });
+                }, function (err) {
+                    if (err) {
+                        // One of the iterations produced an error.
+                        // All processing will now stop.
+                        console.log('A Movie failed to process');
+                    } else {
+                        console.log('All Now Playing Movies processed successfully');
+                    }
+                });
+            }
+        });
+
         currentProvider.collectData(function (isSuccess, cinemas) {
             if (isSuccess) {
                 var moviesTitles = [];
@@ -38,8 +59,8 @@ var cinemaProviders = {
                         }
 
 
-                            console.log("Process Item : " + itemProcessed + " : " + cinemas.length);
-                            callback();
+                        console.log("Process Item : " + itemProcessed + " : " + cinemas.length);
+                        callback();
 
                     });
 
