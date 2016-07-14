@@ -5,6 +5,7 @@
     "blitzBaseUrl": "https://www.cgvblitz.com/en/schedule/cinema",
     "blitzSeatUrl": "https://www.cgvblitz.com/en/schedule/seat",
     "blitzMovieUrl": "https://www.cgvblitz.com/",
+    "blitzNowPlayingMovieUrl": "https://www.cgvblitz.com/",
     "mongoDbHost": "",
     "mongoDbUsername": "",
     "mongoDbPassword": "",
